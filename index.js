@@ -46,7 +46,17 @@ if (!allowAggregations.includes(AGG_NAME)) {
 }
 
 const AGG = AGG_NAME === "NONE" ? null : aql.literal(AGG_NAME);
-const TARGETS = cfg.collections.split(",").map(str => str.trim());
+const TARGETS = cfg.collections.split(",").flatMap(str=>{
+    if (/\/.*\//.test(str.trim()))
+    {
+        return db._collections()
+            .map(c=>c.name)
+            .filter(c=>new RegExp(
+                str.substring(1,str.length-1))
+                   );
+    }
+    else return str.trim();
+});
 
 for (const target of TARGETS) {
   if (!db._collection(target)) {
