@@ -44,7 +44,19 @@ if (
 }
 
 const AGG = aql.literal(cfg.aggregation.toUpperCase());
-const TARGETS = cfg.collections.split(",").map(str => str.trim());
+const TARGETS = cfg.collections.split(",").flatMap(str=>{
+    str=str.trim();
+    if (/\/.*\//.test(str))
+    {
+        return db._collections()
+            .map(c=>c.name)
+            .filter(c=>new RegExp(
+                str.substring(1,str.length-1))
+                   );
+    }
+    else return str;
+});
+
 for (const target of TARGETS) {
   if (!db._collection(target)) {
     throw new Error(

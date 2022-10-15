@@ -14,7 +14,7 @@
   "configuration": {
     "collections": {
       "type": "string",
-      "description": "Names of collections that will be exposed as targets, comma-separated."
+        "description": "Names of collections that will be exposed as targets, comma-separated. You can use regular expressions enclosed like this: /report_.*/"
     },
     "aggregation": {
       "type": "string",
